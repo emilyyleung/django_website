@@ -124,6 +124,53 @@ def single_drawing(request, single_slug):
 		return HttpResponse(f"{single_slug} couldn't be found in the database.")
 
 
+def transmittal(request, pj_slug):
+	dwgs = Drawings.objects.filter(project__number = pj_slug)
+	dname = [d.drawing_name for d in Drawings.objects.filter(project__number = pj_slug)]
+	dname = list(map(str, dname))
+	subs = Submissions.objects.filter(project__number = pj_slug)
+	sname = [s.sub_date for s in Submissions.objects.filter(project__number = pj_slug)]
+	sname.sort()
+
+	mylist = []
+	# y=0
+	for d in dwgs:
+		x=0
+		sublist = []
+		# sublist.append(dname[y])
+		# y += 1
+		ds = [x.sub_date for x in d.submissions.all()]
+		try:
+			for s in sname:
+				if s in ds:
+					x += 1
+					sublist.append(x)
+				else:
+					sublist.append(0)
+		except:
+			for s in sname:
+				sublist.append(0)
+		mylist.append(sublist)
+
+	return render(request=request,
+				  template_name="drawingregister/transmittal.html",
+				  context={"dwgs":dwgs,"subs":subs,"dname":dname,"sname":sname,"mylist":mylist})
+
+def home(request):
+	pjs = Projects.objects.all()
+	return render(request=request,
+				  template_name="drawingregister/home.html",
+				  context={"pjs":pjs})	
+
+def single_project(request, pj_slug):
+
+	pj_numbers = [p.number for p in Projects.objects.all()]
+	if pj_slug in pj_numbers:
+		return render(request=request,
+					  template_name="drawingregister/single_project.html",
+					  context={"number":pj_slug})	
+	else:
+		return redirect('/dregister/')
 
 def open_file_path(request, file_path):
 
@@ -135,28 +182,17 @@ def open_file_path(request, file_path):
 		print(e)
 	return HttpResponse(status=204)
 
-def homepage(request):
-	return render(request=request,
-				  template_name="drawingregister/home.html",
-				  context={})
-
-def drawings(request):
-	dwgs = Drawings.objects.all()
-
-
+def drawings(request, pj_slug):
+	dwgs = Drawings.objects.filter(project__number = pj_slug)
 	return render(request=request,
 				  template_name="drawingregister/drawings.html",
 				  context={"context":dwgs})
 
-
-
-def submissions(request):
-	subs = Submissions.objects.all()
-
-
+def submissions(request, pj_slug):
+	subs = Submissions.objects.filter(project__number = pj_slug)
 	return render(request=request,
 				  template_name="drawingregister/submissions.html",
-				  context={"context":subs})
+				  context={"context":subs,"pj_slug":pj_slug})
 
 @csrf_exempt
 # @csrf_protect
@@ -228,10 +264,6 @@ def updateDrawings(request):
 		print('Not a post')
 		return JsonResponse({'test':"doesn't work"})
 
-
-
-
-
 @csrf_exempt
 def uploadDrawings(request):
 
@@ -288,7 +320,6 @@ def uploadDrawings(request):
 	
 	else:
 		return JsonResponse({'Error':'ONLY POST REQUESTS'})
-
 
 @csrf_exempt
 def uploadSubmissions(request):

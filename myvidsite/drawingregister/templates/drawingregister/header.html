@@ -1,10 +1,41 @@
 <head>
 	{% load static %}
-	<link href="{% static 'tinymce/css/prism.css' %}" rel="stylesheet">
+    <link href="{% static 'tinymce/css/prism.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <style>
+
+      table{
+        empty-cells: show;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+
+
+      }
+
+      th {
+        background: #7cb342 ;
+        position: sticky;
+        top: 0;
+        box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+        color:white;
+      }
+      tr {
+        font-size: 12px;
+        line-height: 0px;
+        min-height: 0px;
+        height: 0px;
+      }
+      td {
+        border: 1px solid blue-grey lighten-4;
+      }
+
+      </style>
 </head>
 
 

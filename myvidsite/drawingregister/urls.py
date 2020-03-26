@@ -26,20 +26,23 @@ router.register(r'submissions_set', views.SubmissionViewSet)
 app_name = "drawingregister"
 
 urlpatterns = [
-	path("", views.homepage, name="homepage"),
-    path("drawings/", views.drawings, name="drawings"),
+	path("", views.home, name="home"),
+    path("<pj_slug>/drawings/", views.drawings, name="drawings"),
     path("drawings/<str:single_slug>/", views.single_drawing, name="single_drawing"),
-    path("submissions/", views.submissions, name="submissions"),
-    path("submissions/<single_slug>", views.single_submission, name="single_submission"),
-    path("submissions/open_file_path/<str:file_path>", views.open_file_path, name="open_file_path"),
+    path("<pj_slug>/submissions/", views.submissions, name="submissions"),
+    path("submissions/<str:single_slug>/", views.single_submission, name="single_submission"),
+    path("submissions/open_file_path/<str:file_path>/", views.open_file_path, name="open_file_path"),
+
+    path("<str:pj_slug>/", views.single_project, name="single_project"),
+
+    path("<pj_slug>/transmittal/", views.transmittal, name="transmittal"),
 
 
-
+    path("postAconex/<str:sub_date>/", views.postAconex, name="postAconex"),
     path("uploadDrawings/", views.uploadDrawings, name="uploadDrawings"),
     path("updateDrawings/", views.updateDrawings, name="updateDrawings"),
 	path("uploadSubmissions/", views.uploadSubmissions, name="uploadSubmissions"),
     path("drawingTable/", views.drawingTable, name="drawingTable"), 
-    path("postAconex/<str:sub_date>/", views.postAconex, name="postAconex"),
     path("newView/", views.newView, name="newView"),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls')),
